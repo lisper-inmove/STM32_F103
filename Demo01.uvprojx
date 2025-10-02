@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>..\stm32f103\HW\Inc;..\stm32f103\CMSIS\Include;..\stm32f103\LIB\Inc</IncludePath>
+              <IncludePath>.\HW\Inc;.\CMSIS\Include;.\LIB\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -394,6 +394,11 @@
               <FileName>stm32f1xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\stm32f103\HW\Src\stm32f1xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HW\Src\rcc.c</FilePath>
             </File>
           </Files>
         </Group>

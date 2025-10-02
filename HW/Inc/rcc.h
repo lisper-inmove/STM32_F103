@@ -1,7 +1,6 @@
-#ifndef __RCC__H
-#define __RCC__H
+#ifndef __RCC_H
+#define __RCC_H
 
-void RccClockInit(void);
-void RccClockInitOuter(void);
+void RccClock_Init(void);
 
 #endif
