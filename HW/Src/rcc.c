@@ -3,23 +3,21 @@
 
 void RccClock_Init(void) {
     /**
-     * 使用内部高速时钟源
+     * 使用外部高速时钟源
      */
     RCC_OscInitTypeDef RCC_OscInitType;
-    RCC_OscInitType.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-    // 启用内部高速时钟源
-    RCC_OscInitType.HSIState = RCC_HSI_ON;
-    // HSI微调(0x00~0x1F),默认值为 0x10
-    RCC_OscInitType.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+    RCC_OscInitType.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    // 启用外部高速时钟源
+    RCC_OscInitType.HSEState = RCC_HSE_ON;
+    RCC_OscInitType.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
 
     // PLL倍频器
     // 启用PLL倍频
     RCC_OscInitType.PLL.PLLState = RCC_PLL_ON;
-    // F103时钟树中,内部高速需要先2分频
-    RCC_OscInitType.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
-    // PLLMUL 支持 2~16,SYSCLK最大为72MHz
-    // 内部时钟源本身为8M,2分频后为4M,所以16倍频之后才64,是小于72M的,所以可以使用最大的16倍
-    RCC_OscInitType.PLL.PLLMUL = RCC_PLL_MUL16;
+    // 使用外部高速
+    RCC_OscInitType.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    // PLLMUL 支持 2~16,SYSCLK最大为72MHz（该开发板外部为8M，所以使用9得到最大支持的72MHz）
+    RCC_OscInitType.PLL.PLLMUL = RCC_PLL_MUL9;
 
     HAL_RCC_OscConfig(&RCC_OscInitType);
 
