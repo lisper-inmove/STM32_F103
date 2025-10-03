@@ -1,6 +1,7 @@
 #include "stm32f1xx_hal.h"
 #include "rcc.h"
 #include "led.h"
+#include "sw.h"
 
 int main(void) {
 	HAL_Init();
@@ -12,9 +13,14 @@ int main(void) {
 	uint32_t PCLK2Freq = HAL_RCC_GetPCLK2Freq();
 
 	LED_Init();
+	SW8_Init();
 
 	while (1) {
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
-		HAL_Delay(1000);
+		switch(SW8_Scan_UP_DELAY(5000)) {
+			case 8: 
+				HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+				break;
+			default: break;
+		}
 	}
 }
