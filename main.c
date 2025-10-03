@@ -1,5 +1,6 @@
 #include "stm32f1xx_hal.h"
 #include "rcc.h"
+#include "led.h"
 
 int main(void) {
 	HAL_Init();
@@ -10,4 +11,10 @@ int main(void) {
 	uint32_t PCLK1Freq = HAL_RCC_GetPCLK1Freq();
 	uint32_t PCLK2Freq = HAL_RCC_GetPCLK2Freq();
 
+	LED_Init();
+
+	while (1) {
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+		HAL_Delay(1000);
+	}
 }

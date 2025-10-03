@@ -400,6 +400,11 @@
               <FileType>1</FileType>
               <FilePath>.\HW\Src\rcc.c</FilePath>
             </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HW\Src\led.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -434,6 +439,16 @@
               <FileName>stm32f1xx_hal_rcc_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\stm32f103\LIB\Src\stm32f1xx_hal_rcc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LIB\Src\stm32f1xx_hal_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LIB\Src\stm32f1xx_hal_uart.c</FilePath>
             </File>
           </Files>
         </Group>
