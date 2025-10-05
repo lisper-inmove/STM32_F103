@@ -45,95 +45,97 @@
 		适用场景：用于按钮、开关等输入设备，确保输入引脚在未按下按钮或未接入信号时有一个已知的低电平状态。
 */
 
-uint8_t sw8_pressed = 0;
+uint8_t sw_pressed = 0;
 
-void SW8_Init(void) {
+void SW_Init(void) {
 	GPIO_InitTypeDef GPIO_InitType;
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	GPIO_InitType.Pin = GPIO_PIN_13;
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	GPIO_InitType.Pin = SW_PIN;
 	GPIO_InitType.Mode = GPIO_MODE_INPUT;
 	GPIO_InitType.Pull = GPIO_PULLDOWN;
 	// GPIO_InitType.Pull = GPIO_PULLUP;
 	// GPIO_InitType.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitType);
+	HAL_GPIO_Init(SW_GPIO_GROUP, &GPIO_InitType);
 	
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SW_GPIO_GROUP, SW_PIN, GPIO_PIN_RESET);
 }
 
-uint8_t SW8_Scan_DOWN(void) {
+uint8_t SW_Scan_DOWN(void) {
 	/**
 		按下触发来控制SW8
 	*/
 	uint32_t i = 0;
-	if (SW8_IN == 1 && sw8_pressed == 0) {
+	uint32_t r1 = SW_IN;
+	uint32_t r2 = SW_IN;
+	if (SW_IN == 1 && sw_pressed == 0) {
 		for (i = 0; i < 0x7FFF; i++) { // 消抖
-			if (SW8_IN == 0) {
+			if (SW_IN == 0) {
 				return 0;
 			}
 		}
-		sw8_pressed = 1;
+		sw_pressed = 1;
 		return 8;
-	} else if (SW8_IN == 0) {
-		sw8_pressed = 0;
+	} else if (SW_IN == 0) {
+		sw_pressed = 0;
 	}
 	return 0;
 }
 
-uint8_t SW8_Scan_UP(void) {
+uint8_t SW_Scan_UP(void) {
 	/**
 		抬起触发来控制SW8
 	*/
 	uint32_t i = 0;
-	if (SW8_IN == 1 && sw8_pressed == 0) {
+	if (SW_IN == 1 && sw_pressed == 0) {
 		for (i = 0; i < 0x7FFF; i++) { // 消抖
-			if (SW8_IN == 0) {
+			if (SW_IN == 0) {
 				return 0;
 			}
 		}
-		sw8_pressed = 1;
+		sw_pressed = 1;
 		return 0;
-	} else if (SW8_IN == 0 && sw8_pressed == 1) {
-		sw8_pressed = 0;
+	} else if (SW_IN == 0 && sw_pressed == 1) {
+		sw_pressed = 0;
 		return 8;
 	}
 	return 0;
 }
 
-uint8_t SW8_Scan_LONG_DOWN(void) {
+uint8_t SW_Scan_LONG_DOWN(void) {
 	/**
 		长按触发来控制SW8
 	*/
 	uint32_t i = 0;
-	if (SW8_IN == 1 && sw8_pressed == 0) {
+	if (SW_IN == 1 && sw_pressed == 0) {
 		for (i = 0; i < 0x7FFFFF; i++) { // 增加循环的长度来达到延时触发
-			if (SW8_IN == 0) {
+			if (SW_IN == 0) {
 				return 0;
 			}
 		}
-		sw8_pressed = 1;
+		sw_pressed = 1;
 		return 8;
-	} else if (SW8_IN == 0) {
-		sw8_pressed = 0;
+	} else if (SW_IN == 0) {
+		sw_pressed = 0;
 	}
 	return 0;
 }
 
-uint8_t SW8_Scan_UP_DELAY(uint32_t delay) {
+uint8_t SW_Scan_UP_DELAY(uint32_t delay) {
 	/**
 		抬起后经过延时触发来控制SW8
 		delay: 单位毫秒
 	*/
 	uint32_t i = 0;
-	if (SW8_IN == 1 && sw8_pressed == 0) {
+	if (SW_IN == 1 && sw_pressed == 0) {
 		for (i = 0; i < 0x7FFF; i++) { // 消抖
-			if (SW8_IN == 0) {
+			if (SW_IN == 0) {
 				return 0;
 			}
 		}
-		sw8_pressed = 1;
+		sw_pressed = 1;
 		return 0;
-	} else if (SW8_IN == 0 && sw8_pressed == 1) {
-		sw8_pressed = 0;
+	} else if (SW_IN == 0 && sw_pressed == 1) {
+		sw_pressed = 0;
 		HAL_Delay(delay);
 		return 8;
 	}

@@ -3,13 +3,18 @@
 
 #include <stdint.h>
 
-#define SW8_IN HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
+#define SW_GPIO_GROUP GPIOA
+#define SW_PIN GPIO_PIN_0
+#define LED_GPIO_GROUP GPIOB
+#define LED_PIN GPIO_PIN_0
 
-void SW8_Init(void);
-uint8_t SW8_Scan_DOWN(void);
-uint8_t SW8_Scan_LONG_DOWN(void);
-uint8_t SW8_Scan_UP(void);
-uint8_t SW8_Scan_UP_DELAY(uint32_t delay);
+#define SW_IN HAL_GPIO_ReadPin(SW_GPIO_GROUP, SW_PIN)
+
+void SW_Init(void);
+uint8_t SW_Scan_DOWN(void);
+uint8_t SW_Scan_LONG_DOWN(void);
+uint8_t SW_Scan_UP(void);
+uint8_t SW_Scan_UP_DELAY(uint32_t delay);
 
 
 #endif
