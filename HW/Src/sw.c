@@ -1,5 +1,6 @@
 #include "sw.h"
 #include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_cortex.h"
 
 /**
 	GPIO_MODE_INPUT: 输入模式，GPIO引脚用于接收外部信号。
@@ -34,18 +35,18 @@
 	2. GPIO_PULLUP
 		含义：启用上拉电阻。
 		作用：该选项启用内部上拉电阻，使GPIO引脚在没有外部驱动的情况下保持高电平（VCC）。
-			当外部电路没有驱动时，GPIO引脚将会拉到高电平。
 		适用场景：
 			用于按钮、开关等输入设备，确保输入引脚在未按下按钮或未接入信号时有一个已知的高电平状态。
 
 	3. GPIO_PULLDOWN
 		含义：启用下拉电阻。
 		作用：该选项启用内部下拉电阻，使GPIO引脚在没有外部驱动的情况下保持低电平（GND）。
-			当外部电路没有驱动时，GPIO引脚将会拉到低电平。
 		适用场景：用于按钮、开关等输入设备，确保输入引脚在未按下按钮或未接入信号时有一个已知的低电平状态。
 */
 
 uint8_t sw_pressed = 0;
+
+// =========================== 通过轮询控制按键 ==================================
 
 void SW_Init(void) {
 	GPIO_InitTypeDef GPIO_InitType;
@@ -140,4 +141,33 @@ uint8_t SW_Scan_UP_DELAY(uint32_t delay) {
 		return 8;
 	}
 	return 0;
+}
+
+// =========================== 通过中断控制按键 ==================================
+void SW_Init_IT() {
+	GPIO_InitTypeDef GPIO_InitType;
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	GPIO_InitType.Pin = SW_PIN;
+	// 按键中断，上升延触发
+	// GPIO_InitType.Mode = GPIO_MODE_IT_RISING;
+	GPIO_InitType.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitType.Pull = GPIO_PULLDOWN;
+	HAL_GPIO_Init(SW_GPIO_GROUP, &GPIO_InitType);
+	
+	HAL_NVIC_SetPriority(EXTI0_IRQn, 4, 0);
+	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	uint32_t i;
+	if(SW_IN == 0) {
+		for (i = 0; i < 0x7FFF; i++) {
+			if (SW_IN == 1) return;
+		}
+		HAL_GPIO_TogglePin(LED_GPIO_GROUP, LED_PIN);
+	}
+}
+
+void EXTI0_IRQHandler(void) {
+	HAL_GPIO_EXTI_IRQHandler(SW_PIN);
 }

@@ -16,5 +16,7 @@ uint8_t SW_Scan_LONG_DOWN(void);
 uint8_t SW_Scan_UP(void);
 uint8_t SW_Scan_UP_DELAY(uint32_t delay);
 
+void SW_Init_IT(void);
+
 
 #endif
